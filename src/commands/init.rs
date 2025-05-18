@@ -54,4 +54,6 @@ pub fn initialize_repo() {
         eprintln!("Error: Failed to create .hit/HEAD file: {}", e);
         std::process::exit(1);
     }
+
+    println!("Initialized empty Hit repository in {}", hit_dir.display());
 }
