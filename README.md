@@ -1,1 +1,1 @@
-shitty git clone written in blazingly fast rust
+# shitty git clone written in blazingly fast rust
