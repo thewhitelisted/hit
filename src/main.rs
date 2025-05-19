@@ -3,6 +3,7 @@ mod commands {
     pub mod hash_object;
     pub mod cat_file;
     pub mod write_tree;
+    pub mod commit_tree;
 }
 
 fn main() {
@@ -41,6 +42,19 @@ fn main() {
                 std::process::exit(1);
             }
             commands::write_tree::write_tree();
+        }
+        "commit-tree" => {
+            if args.len() != 3 && args.len() != 5 {
+                eprintln!("Usage: {} commit-tree <hash> [-m <message>]", args[0]);
+                std::process::exit(1);
+            }
+            let hash = &args[2];
+            let message = if args.len() > 3 && args[3] == "-m" {
+                Some(args[4].clone())
+            } else {
+                None
+            };
+            commands::commit_tree::commit_tree(hash, message.as_deref().unwrap_or("commit!"));
         }
         _ => {
             eprintln!("Unknown command: {}", command);

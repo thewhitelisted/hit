@@ -16,7 +16,7 @@ pub fn write_tree() {
 
 /// Recursively writes a tree object for a directory
 pub fn write_directory(path: &str) -> String {
-    println!("Writing directory: {}", path);
+    // println!("Writing directory: {}", path);
     let mut tree_entries = Vec::new();
     let path_buf = PathBuf::from(path);
 
