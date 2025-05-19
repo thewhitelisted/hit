@@ -10,15 +10,28 @@ use super::hash_object;
 
 /// Entry point: write the root tree from the current directory
 pub fn write_tree() {
-    let sha = write_directory(".");
+    let sha = write_directory(".", Vec::new());
     println!("{}", sha);
 }
 
 /// Recursively writes a tree object for a directory
-pub fn write_directory(path: &str) -> String {
+pub fn write_directory(path: &str, ignore: Vec<String>) -> String {
     // println!("Writing directory: {}", path);
     let mut tree_entries = Vec::new();
     let path_buf = PathBuf::from(path);
+
+    // set ignorelist to ignore or read .hitignore if it exists
+    let mut ignore_list = ignore;
+    let ignore_path = path_buf.join(".hitignore");
+    if ignore_path.exists() {
+        let contents = fs::read_to_string(&ignore_path).expect("Failed to read .hitignore");
+        for line in contents.lines() {
+            let trimmed = line.trim();
+            if !trimmed.is_empty() {
+                ignore_list.push(trimmed.to_string());
+            }
+        }
+    }
 
     for entry in fs::read_dir(&path_buf).expect("Failed to read directory") {
         let entry = entry.expect("Failed to read entry");
@@ -41,8 +54,13 @@ pub fn write_directory(path: &str) -> String {
 
             tree_entries.extend(entry);
         } else if file_path.is_dir() && name != ".hit" {
+            // skip all directories that are in the ignore list
+            if ignore_list.iter().any(|ignore| ignore.contains(&name)) {
+                // println!("Ignoring directory: {}", name);
+                continue;
+            }
             // Recurse into subdirectory
-            let sub_tree_hash = write_directory(file_path.to_str().unwrap());
+            let sub_tree_hash = write_directory(file_path.to_str().unwrap(), ignore_list.clone());
             let sha_bytes = hex::decode(sub_tree_hash).expect("Invalid SHA");
 
             // Add tree entry: 40000 <dirname>\0<binary SHA>
