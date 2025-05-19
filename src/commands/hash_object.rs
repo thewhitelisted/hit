@@ -5,7 +5,7 @@ use flate2::write::ZlibEncoder;
 use flate2::Compression;
 use sha1::{Digest, Sha1};
 
-pub fn hash_object(file_path: &str, write: bool) {
+pub fn hash_object(file_path: &str, write: bool, print: bool) -> String{
     // Resolve the absolute path of the file
     let resolved_path = Path::new(file_path)
         .canonicalize()
@@ -27,7 +27,9 @@ pub fn hash_object(file_path: &str, write: bool) {
     let hash_hex = format!("{:x}", hash);
 
     // Print the hash
-    println!("{}", hash_hex);
+    if print {
+        println!("{}", hash_hex);
+    }
 
     if write {
         // Prepare the path: .git/objects/ab/cdef... based on hash
@@ -37,7 +39,7 @@ pub fn hash_object(file_path: &str, write: bool) {
 
         // Skip if the object already exists
         if object_path.exists() {
-            return;
+            return hash_hex;
         }
 
         // Ensure the directory exists
@@ -53,4 +55,6 @@ pub fn hash_object(file_path: &str, write: bool) {
         // Write the compressed data to disk
         fs::write(&object_path, compressed).expect("Failed to write object file");
     }
+
+    hash_hex
 }

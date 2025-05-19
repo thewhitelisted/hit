@@ -2,6 +2,7 @@ mod commands {
     pub mod init;
     pub mod hash_object;
     pub mod cat_file;
+    pub mod write_tree;
 }
 
 fn main() {
@@ -22,7 +23,7 @@ fn main() {
             }
             let write = args[2] == "-w";
             let file_path = if write { &args[3] } else { &args[2] };
-            commands::hash_object::hash_object(file_path, write);
+            commands::hash_object::hash_object(file_path, write, true);
         }
         "cat-file" => {
             if args.len() < 3 {
@@ -33,6 +34,13 @@ fn main() {
             let hash = if print { &args[3] } else { &args[2] };
             commands::cat_file::cat_file(hash, print);
             
+        }
+        "write-tree" => {
+            if args.len() != 2 {
+                eprintln!("Usage: {} write-tree", args[0]);
+                std::process::exit(1);
+            }
+            commands::write_tree::write_tree();
         }
         _ => {
             eprintln!("Unknown command: {}", command);
