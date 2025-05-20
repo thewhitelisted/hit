@@ -1,61 +1,100 @@
+use super::objects::{Object};
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
-pub fn resolve_head() -> Option<String> {
-    let head_path = PathBuf::from(".hit/HEAD");
-    let head_contents = fs::read_to_string(&head_path).ok()?.trim().to_string();
+/// Main checkout command — accepts a branch or commit SHA
+pub fn checkout(target: &str) {
+    let branch_path = format!(".hit/refs/heads/{}", target);
 
-    if head_contents.starts_with("ref:") {
-        // symbolic ref
-        let ref_path = head_contents[5..].trim(); // after "ref: "
-        let full_ref_path = PathBuf::from(".hit").join(ref_path);
-        fs::read_to_string(full_ref_path).ok().map(|s| s.trim().to_string())
+    if Path::new(&branch_path).exists() {
+        // It's a branch name
+        let sha = fs::read_to_string(&branch_path)
+            .expect("Failed to read branch ref")
+            .trim()
+            .to_string();
+
+        restore_commit(&sha);
+        update_head_to_branch(target, &sha);
     } else {
-        // detached HEAD
-        Some(head_contents)
+        // Assume it's a commit SHA (detached)
+        restore_commit(target);
+        update_head_to_commit(target);
     }
 }
 
-pub fn update_head_to_branch(branch: &str, sha: &str) {
+/// Restore the working directory to the state of a commit
+fn restore_commit(commit_sha: &str) {
+    let commit_obj = Object::read(commit_sha).expect("Failed to read commit object");
+
+    let tree_sha = match commit_obj {
+        Object::Commit(commit) => commit.tree,
+        _ => panic!("{} is not a commit object", commit_sha),
+    };
+
+    clear_working_directory();
+    restore_tree(&tree_sha, PathBuf::from("."));
+}
+
+/// Recursively walk a tree and restore its files and subtrees
+fn restore_tree(tree_sha: &str, base_path: PathBuf) {
+    let tree_obj = Object::read(tree_sha).expect("Failed to read tree object");
+
+    if let Object::Tree(tree) = tree_obj {
+        for entry in tree.entries {
+            let path = base_path.join(&entry.name);
+
+            match entry.mode.as_str() {
+                "100644" | "100755" => {
+                    let blob = Object::read(&entry.sha).expect("Failed to read blob");
+                    if let Object::Blob(data) = blob {
+                        if let Some(parent) = path.parent() {
+                            fs::create_dir_all(parent).expect("Failed to create directory");
+                        }
+                        fs::write(path, data).expect("Failed to write file");
+                    }
+                }
+                "40000" => {
+                    fs::create_dir_all(&path).expect("Failed to create directory");
+                    restore_tree(&entry.sha, path);
+                }
+                _ => eprintln!("Unknown mode: {}", entry.mode),
+            }
+        }
+    } else {
+        panic!("{} is not a tree object", tree_sha);
+    }
+}
+
+/// Clears the working directory except for `.hit`
+fn clear_working_directory() {
+    let entries = fs::read_dir(".").expect("Failed to read directory");
+    for entry in entries {
+        let entry = entry.expect("Failed to read entry");
+        let path = entry.path();
+
+        if path.file_name().map_or(false, |name| name == ".hit") {
+            continue;
+        }
+
+        if path.is_dir() {
+            fs::remove_dir_all(&path).expect("Failed to remove directory");
+        } else {
+            fs::remove_file(&path).expect("Failed to remove file");
+        }
+    }
+}
+
+/// Writes a detached HEAD (raw SHA)
+fn update_head_to_commit(sha: &str) {
+    fs::write(".hit/HEAD", format!("{}\n", sha)).expect("Failed to write detached HEAD");
+}
+
+/// Writes a symbolic HEAD and updates branch ref
+fn update_head_to_branch(branch: &str, sha: &str) {
     let head_contents = format!("ref: refs/heads/{}\n", branch);
     fs::write(".hit/HEAD", head_contents).expect("Failed to write HEAD");
 
     let ref_path = format!(".hit/refs/heads/{}", branch);
     fs::create_dir_all(".hit/refs/heads").expect("Failed to create branch ref dir");
     fs::write(ref_path, format!("{}\n", sha)).expect("Failed to update branch ref");
-}
-
-pub fn update_head_to_commit(sha: &str) {
-    fs::write(".hit/HEAD", format!("{}\n", sha)).expect("Failed to write detached HEAD");
-}
-
-
-pub fn current_branch_name() -> Option<String> {
-    let head_path = PathBuf::from(".hit/HEAD");
-    let head_contents = fs::read_to_string(&head_path).ok()?;
-    if head_contents.starts_with("ref: ") {
-        let full = head_contents[5..].trim(); // "refs/heads/master"
-        full.strip_prefix("refs/heads/").map(|s| s.to_string())
-    } else {
-        None // detached HEAD
-    }
-}
-
-fn checkout(target: &str) {
-    // is this a branch name?
-    let branch_ref = format!(".hit/refs/heads/{}", target);
-    if PathBuf::from(&branch_ref).exists() {
-        // resolve the SHA
-        let sha = fs::read_to_string(&branch_ref)
-            .expect("Failed to read branch ref")
-            .trim()
-            .to_string();
-
-        restore_commit(&sha); // do your restore logic
-        update_head_to_branch(target, &sha);
-    } else {
-        // assume it's a commit SHA (detached)
-        restore_commit(target);
-        update_head_to_commit(target);
-    }
 }
