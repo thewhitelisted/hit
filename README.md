@@ -14,7 +14,7 @@ i named the project "hit" because it is similar to git and it was the next lette
 - [x] write-tree
 - [x] commit-tree
 - [x] hitignore
-- [x] checkout
+- [x] checkout -> not quite finished, see TODOS in /commands/checkout.rs
 - [x] branch
 - [ ] status
 - [ ] add and .hit/index
