@@ -4,6 +4,9 @@ mod commands {
     pub mod cat_file;
     pub mod write_tree;
     pub mod commit_tree;
+    pub mod checkout;
+    pub mod branch;
+    pub mod objects;
 }
 
 fn main() {
@@ -55,6 +58,21 @@ fn main() {
                 None
             };
             commands::commit_tree::commit_tree(hash, message.as_deref().unwrap_or("commit!"));
+        }
+        "checkout" => {
+            if args.len() != 3 {
+                eprintln!("Usage: {} checkout <hash>", args[0]);
+                std::process::exit(1);
+            }
+            let hash = &args[2];
+            commands::checkout::checkout(hash);
+        }
+        "branch" => {
+            let branch_name = if args.len() > 2 { Some(&args[2][..]) } else { None };
+            if let Err(e) = commands::branch::branch(branch_name) {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
         }
         _ => {
             eprintln!("Unknown command: {}", command);

@@ -14,4 +14,5 @@ i named the project "hit" because it is similar to git and it was the next lette
 - [x] write-tree
 - [x] commit-tree
 - [x] hitignore
-- [ ] checkout
+- [x] checkout
+- [x] branch
