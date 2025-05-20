@@ -65,13 +65,15 @@ fn restore_tree(tree_sha: &str, base_path: PathBuf) {
     }
 }
 
-/// Clears the working directory except for `.hit`
 fn clear_working_directory() {
-    let entries = fs::read_dir(".").expect("Failed to read directory");
-    for entry in entries {
-        let entry = entry.expect("Failed to read entry");
-        let path = entry.path();
+    // TODO: handle .hitignore
+    let entries: Vec<_> = fs::read_dir(".")
+        .expect("Failed to read directory")
+        .filter_map(Result::ok)
+        .map(|entry| entry.path())
+        .collect();
 
+    for path in entries {
         if path.file_name().map_or(false, |name| name == ".hit") {
             continue;
         }
@@ -83,6 +85,7 @@ fn clear_working_directory() {
         }
     }
 }
+
 
 /// Writes a detached HEAD (raw SHA)
 fn update_head_to_commit(sha: &str) {
