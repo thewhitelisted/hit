@@ -6,6 +6,50 @@ i always wanted to understand and learn lower level programming at a higher leve
 
 i named the project "hit" because it is similar to git and it was the next letter after g.
 
+## install
+
+you can install hit by cloning this repository and running 
+
+```bash
+cargo build --release
+```
+
+after doing this, you can add the hit.exe file to your path in /target/release/
+
+## current features
+
+### make a repository!
+
+```bash
+hit init
+```
+
+### stage all changes!
+
+```bash
+hit write-tree
+```
+
+### use stage hash to commit!
+
+```bash
+hit commit-tree [tree-hash] [-m message]
+```
+
+### checkout!
+
+```bash
+hit checkout [commit-hash]
+hit checkout [branch]
+```
+
+### create and list branches!
+
+```bash
+hit branch [name]
+hit branch
+```
+
 ## TODOS
 
 - [x] init
