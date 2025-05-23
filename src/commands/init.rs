@@ -1,11 +1,16 @@
+// init: refers to the word "initialize" in the context of setting up a new repository
+
 use std::env;
 use std::fs;
 
+// home
 pub fn initialize_repo() {
+    // get path
     let path = env::current_dir().unwrap_or_else(|_| {
         eprintln!("Error: Failed to get current directory");
         std::process::exit(1);
     });
+    // weird edge case
     if !path.exists() {
         eprintln!("Error: Directory does not exist");
         std::process::exit(1);
@@ -17,6 +22,7 @@ pub fn initialize_repo() {
         eprintln!("Error: .hit directory already exists");
         std::process::exit(1);
     }
+    // cooked if this fails
     if let Err(e) = fs::create_dir(&hit_dir) {
         eprintln!("Error: Failed to create .hit directory: {}", e);
         std::process::exit(1);

@@ -1,3 +1,5 @@
+// to my dismay, this file is not a photo of a cat.
+
 pub fn cat_file(hash: &str, print: bool) {
     // look up file at .hit/objects/ab/cdef...
     let object_dir = format!(".hit/objects/{}", &hash[..2]);

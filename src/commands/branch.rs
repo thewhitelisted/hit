@@ -1,3 +1,5 @@
+// a branch refers to the part of a tree that is smaller than the trunk, in this case, a branch of the commit history
+
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::io;

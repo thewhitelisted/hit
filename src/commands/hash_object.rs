@@ -1,3 +1,7 @@
+// a hash is the prefix to the word: hashbrown.
+// a hashbrown is a type of potato.
+// i like potato.
+
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};

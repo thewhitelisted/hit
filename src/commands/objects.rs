@@ -1,3 +1,9 @@
+// object is a word refering to disagreeing with something
+
+use flate2::read::ZlibDecoder;
+use std::io::Read;
+
+// datatype for git objects epic rust enums
 pub enum Object {
     Blob(Vec<u8>),
     Tree(Tree),
@@ -10,9 +16,7 @@ impl Object {
         let path = format!(".hit/objects/{}/{}", &sha[..2], &sha[2..]);
         let compressed = std::fs::read(&path).map_err(|_| "Object not found")?;
 
-        // Decompress (zlib)
-        use flate2::read::ZlibDecoder;
-        use std::io::Read;
+        // decompress
         let mut decoder = ZlibDecoder::new(&compressed[..]);
         let mut data = Vec::new();
         decoder.read_to_end(&mut data).map_err(|_| "Decompression failed")?;
@@ -37,10 +41,12 @@ impl Object {
     }
 }
 
+// wht is this 
 pub struct Tree {
     pub entries: Vec<TreeEntry>,
 }
 
+// oh this is
 pub struct TreeEntry {
     pub mode: String,
     pub name: String,
@@ -66,7 +72,7 @@ impl Tree {
                 name.push(data[i]);
                 i += 1;
             }
-            i += 1; // skip null byte
+            i += 1; // skip null byte... evil byte hack
 
             // SHA (20 bytes)
             let sha_bin = &data[i..i + 20];
@@ -84,6 +90,7 @@ impl Tree {
     }
 }
 
+// if this goes wrong, we have a commitment issue :(
 #[allow(dead_code)]
 pub struct Commit {
     pub tree: String,

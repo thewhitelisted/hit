@@ -1,3 +1,4 @@
+// the long list of death
 mod commands {
     pub mod init;
     pub mod hash_object;
@@ -82,6 +83,7 @@ fn main() {
             }
             commands::status::status();
         }
+        // TODO: HELP!!!
         _ => {
             eprintln!("Unknown command: {}", command);
             std::process::exit(1);

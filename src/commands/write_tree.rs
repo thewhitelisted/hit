@@ -1,3 +1,5 @@
+// writing trees is grammatically correct, but not semantically correct
+
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};

@@ -1,3 +1,5 @@
+// i couldn't come up with a witty line for this file
+
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};

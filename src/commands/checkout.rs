@@ -1,3 +1,5 @@
+// checkout refers to the area of a grocery store where you pay for your items
+
 use super::objects::{Object};
 use std::fs;
 use std::path::{Path, PathBuf};
