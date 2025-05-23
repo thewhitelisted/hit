@@ -7,6 +7,7 @@ mod commands {
     pub mod checkout;
     pub mod branch;
     pub mod objects;
+    pub mod status;
 }
 
 fn main() {
@@ -73,6 +74,13 @@ fn main() {
                 eprintln!("Error: {}", e);
                 std::process::exit(1);
             }
+        }
+        "status" => {
+            if args.len() != 2 {
+                eprintln!("Usage: {} status", args[0]);
+                std::process::exit(1);
+            }
+            commands::status::status();
         }
         _ => {
             eprintln!("Unknown command: {}", command);

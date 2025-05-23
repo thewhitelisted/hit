@@ -50,6 +50,12 @@ hit branch [name]
 hit branch
 ```
 
+### track your changed, deleted, and created files!
+
+```bash
+hit status
+```
+
 ## TODOS
 
 - [x] init
@@ -60,6 +66,6 @@ hit branch
 - [x] hitignore
 - [x] checkout -> not quite finished, see TODOS in /commands/checkout.rs
 - [x] branch
-- [ ] status
+- [x] status
 - [ ] add and .hit/index
 - [ ] log
