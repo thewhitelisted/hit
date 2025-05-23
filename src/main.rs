@@ -9,6 +9,7 @@ mod commands {
     pub mod status;
 }
 
+// the marginally smaller list of death
 pub mod utils {
     pub mod hash_object;
     pub mod objects;
