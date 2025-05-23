@@ -19,7 +19,9 @@ impl Object {
         // decompress
         let mut decoder = ZlibDecoder::new(&compressed[..]);
         let mut data = Vec::new();
-        decoder.read_to_end(&mut data).map_err(|_| "Decompression failed")?;
+        decoder
+            .read_to_end(&mut data)
+            .map_err(|_| "Decompression failed")?;
 
         // Parse header
         if let Some(null_pos) = data.iter().position(|&b| b == 0) {
@@ -41,7 +43,7 @@ impl Object {
     }
 }
 
-// wht is this 
+// wht is this
 pub struct Tree {
     pub entries: Vec<TreeEntry>,
 }
@@ -124,6 +126,10 @@ impl Commit {
             }
         }
 
-        Ok(Commit { tree, parent, message: message.trim().to_string() })
+        Ok(Commit {
+            tree,
+            parent,
+            message: message.trim().to_string(),
+        })
     }
 }

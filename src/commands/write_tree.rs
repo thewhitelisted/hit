@@ -4,8 +4,8 @@ use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use flate2::write::ZlibEncoder;
 use flate2::Compression;
+use flate2::write::ZlibEncoder;
 use sha1::{Digest, Sha1};
 
 use crate::utils::hash_object;

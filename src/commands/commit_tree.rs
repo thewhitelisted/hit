@@ -5,15 +5,15 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use flate2::write::ZlibEncoder;
-use flate2::Compression;
-use sha1::{Digest, Sha1};
 use chrono::Offset;
+use flate2::Compression;
+use flate2::write::ZlibEncoder;
+use sha1::{Digest, Sha1};
 
 pub fn commit_tree(tree_sha: &str, message: &str) -> String {
     let author = "Your Name <you@example.com>";
     let now = chrono::Local::now();
-    let offset = now.offset().fix().local_minus_utc();  // in seconds
+    let offset = now.offset().fix().local_minus_utc(); // in seconds
     let offset_hours = offset / 3600; // Convert seconds to hours
     let offset_minutes = (offset.abs() % 3600) / 60; // Get remaining minutes
     let offset_str = format!("{:+03}:{:02}", offset_hours, offset_minutes);

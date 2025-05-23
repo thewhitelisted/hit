@@ -1,12 +1,12 @@
 // the long list of death
 mod commands {
-    pub mod init;
-    pub mod cat_file;
-    pub mod write_tree;
-    pub mod commit_tree;
-    pub mod checkout;
     pub mod branch;
+    pub mod cat_file;
+    pub mod checkout;
+    pub mod commit_tree;
+    pub mod init;
     pub mod status;
+    pub mod write_tree;
 }
 
 // the marginally smaller list of death
@@ -43,7 +43,6 @@ fn main() {
             let print = args[2] == "-p";
             let hash = if print { &args[3] } else { &args[2] };
             commands::cat_file::cat_file(hash, print);
-            
         }
         "write-tree" => {
             if args.len() != 2 {
@@ -74,7 +73,11 @@ fn main() {
             commands::checkout::checkout(hash);
         }
         "branch" => {
-            let branch_name = if args.len() > 2 { Some(&args[2][..]) } else { None };
+            let branch_name = if args.len() > 2 {
+                Some(&args[2][..])
+            } else {
+                None
+            };
             if let Err(e) = commands::branch::branch(branch_name) {
                 eprintln!("Error: {}", e);
                 std::process::exit(1);

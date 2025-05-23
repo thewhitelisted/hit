@@ -88,7 +88,6 @@ fn clear_working_directory() {
     }
 }
 
-
 /// Writes a detached HEAD (raw SHA)
 fn update_head_to_commit(sha: &str) {
     fs::write(".hit/HEAD", format!("{}\n", sha)).expect("Failed to write detached HEAD");

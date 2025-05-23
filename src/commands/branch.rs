@@ -1,8 +1,8 @@
 // a branch refers to the part of a tree that is smaller than the trunk, in this case, a branch of the commit history
 
 use std::fs;
-use std::path::{Path, PathBuf};
 use std::io;
+use std::path::{Path, PathBuf};
 
 /// Create a new branch or list all branches
 pub fn branch(branch_name: Option<&str>) -> Result<(), io::Error> {
@@ -22,7 +22,10 @@ fn create_branch(branch_name: &str) -> Result<(), io::Error> {
     // Validate branch name (simple validation)
     if branch_name.contains('/') || branch_name.contains('\\') || branch_name.trim().is_empty() {
         eprintln!("Error: Invalid branch name '{}'", branch_name);
-        return Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid branch name"));
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "Invalid branch name",
+        ));
     }
 
     // Read the current commit SHA from HEAD
@@ -39,11 +42,14 @@ fn create_branch(branch_name: &str) -> Result<(), io::Error> {
 
     // Create branch ref
     let branch_path = PathBuf::from(format!(".hit/refs/heads/{}", branch_name));
-    
+
     // Check if branch already exists
     if branch_path.exists() {
         eprintln!("Error: Branch '{}' already exists", branch_name);
-        return Err(io::Error::new(io::ErrorKind::AlreadyExists, "Branch already exists"));
+        return Err(io::Error::new(
+            io::ErrorKind::AlreadyExists,
+            "Branch already exists",
+        ));
     }
 
     // Create the branch (write commit SHA to branch ref file)
@@ -57,7 +63,7 @@ fn create_branch(branch_name: &str) -> Result<(), io::Error> {
 fn list_branches() -> Result<(), io::Error> {
     let heads_dir = Path::new(".hit/refs/heads");
     if !heads_dir.exists() {
-        return Ok(());  // No branches yet
+        return Ok(()); // No branches yet
     }
 
     // Read HEAD to determine current branch
@@ -65,7 +71,7 @@ fn list_branches() -> Result<(), io::Error> {
     let current_branch = if head_contents.starts_with("ref: refs/heads/") {
         Some(head_contents["ref: refs/heads/".len()..].trim())
     } else {
-        None  // Detached HEAD
+        None // Detached HEAD
     };
 
     // List all files in refs/heads directory
@@ -75,7 +81,7 @@ fn list_branches() -> Result<(), io::Error> {
     for entry in entries {
         let entry = entry?;
         let path = entry.path();
-        
+
         if path.is_file() {
             if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
                 found_branches = true;

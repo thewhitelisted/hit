@@ -1,7 +1,7 @@
 // status refers to the level of being or condition of something, in this case, the state of the repository
 
-use crate::utils::objects::Object;
 use crate::utils::hash_object::hash_object;
+use crate::utils::objects::Object;
 use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -121,7 +121,9 @@ fn resolve_head() -> Option<String> {
     if head.starts_with("ref: ") {
         let ref_path = head[5..].trim();
         let full_path = Path::new(".hit").join(ref_path);
-        fs::read_to_string(full_path).ok().map(|s| s.trim().to_string())
+        fs::read_to_string(full_path)
+            .ok()
+            .map(|s| s.trim().to_string())
     } else {
         Some(head.trim().to_string())
     }

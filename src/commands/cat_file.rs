@@ -17,14 +17,19 @@ pub fn cat_file(hash: &str, print: bool) {
     let mut decompressed_data = Vec::new();
     std::io::copy(&mut decoder, &mut decompressed_data).expect("Failed to decompress object");
     // parse header
-    let header_end = decompressed_data.iter().position(|&b| b == 0).expect("Failed to find header end");
+    let header_end = decompressed_data
+        .iter()
+        .position(|&b| b == 0)
+        .expect("Failed to find header end");
     let header = String::from_utf8_lossy(&decompressed_data[..header_end]);
     let header_parts: Vec<&str> = header.split_whitespace().collect();
     if header_parts.len() < 2 {
         eprintln!("Error: Invalid object format");
         std::process::exit(1);
     }
-    let object_length: usize = header_parts[1].parse().expect("Failed to parse object length");
+    let object_length: usize = header_parts[1]
+        .parse()
+        .expect("Failed to parse object length");
     if object_length != decompressed_data.len() - header_end - 1 {
         eprintln!("Error: Object length mismatch");
         std::process::exit(1);
@@ -39,5 +44,4 @@ pub fn cat_file(hash: &str, print: bool) {
         // print hash
         println!("{}", hash);
     }
-
 }

@@ -2,14 +2,14 @@
 // a hashbrown is a type of potato.
 // i like potato.
 
+use flate2::Compression;
+use flate2::write::ZlibEncoder;
+use sha1::{Digest, Sha1};
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
-use flate2::write::ZlibEncoder;
-use flate2::Compression;
-use sha1::{Digest, Sha1};
 
-pub fn hash_object(file_path: &str, write: bool, print: bool) -> String{
+pub fn hash_object(file_path: &str, write: bool, print: bool) -> String {
     // Resolve the absolute path of the file
     let resolved_path = Path::new(file_path)
         .canonicalize()
