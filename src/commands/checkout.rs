@@ -76,7 +76,7 @@ fn clear_working_directory() {
         .collect();
 
     for path in entries {
-        if path.file_name().map_or(false, |name| name == ".hit") {
+        if path.file_name().is_some_and(|name| name == ".hit") {
             continue;
         }
 

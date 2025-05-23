@@ -68,7 +68,7 @@ pub fn commit_tree(tree_sha: &str, message: &str) -> String {
 
     // Store in .git/objects/xx/yyyy...
     let object_dir = format!(".hit/objects/{}", &hash_hex[..2]);
-    let object_file = format!("{}", &hash_hex[2..]);
+    let object_file = (&hash_hex[2..]).to_string();
     let object_path = Path::new(&object_dir).join(&object_file);
 
     if !object_path.exists() {

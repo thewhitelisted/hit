@@ -38,7 +38,7 @@ pub fn hash_object(file_path: &str, write: bool, print: bool) -> String {
     if write {
         // Prepare the path: .git/objects/ab/cdef... based on hash
         let object_dir = format!(".hit/objects/{}", &hash_hex[..2]);
-        let object_file = format!("{}", &hash_hex[2..]);
+        let object_file = (&hash_hex[2..]).to_string();
         let object_path = PathBuf::from(&object_dir).join(object_file);
 
         // Skip if the object already exists
