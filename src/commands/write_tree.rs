@@ -8,7 +8,7 @@ use flate2::write::ZlibEncoder;
 use flate2::Compression;
 use sha1::{Digest, Sha1};
 
-use super::hash_object;
+use crate::utils::hash_object;
 
 /// Entry point: write the root tree from the current directory
 pub fn write_tree() {

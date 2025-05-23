@@ -1,14 +1,17 @@
 // the long list of death
 mod commands {
     pub mod init;
-    pub mod hash_object;
     pub mod cat_file;
     pub mod write_tree;
     pub mod commit_tree;
     pub mod checkout;
     pub mod branch;
-    pub mod objects;
     pub mod status;
+}
+
+pub mod utils {
+    pub mod hash_object;
+    pub mod objects;
 }
 
 fn main() {
@@ -29,7 +32,7 @@ fn main() {
             }
             let write = args[2] == "-w";
             let file_path = if write { &args[3] } else { &args[2] };
-            commands::hash_object::hash_object(file_path, write, true);
+            utils::hash_object::hash_object(file_path, write, true);
         }
         "cat-file" => {
             if args.len() < 3 {

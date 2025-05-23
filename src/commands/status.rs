@@ -1,7 +1,7 @@
 // status refers to the level of being or condition of something, in this case, the state of the repository
 
-use super::objects::{Object};
-use super::hash_object::hash_object;
+use crate::utils::objects::Object;
+use crate::utils::hash_object::hash_object;
 use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
