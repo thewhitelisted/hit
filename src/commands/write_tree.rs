@@ -90,7 +90,7 @@ pub fn write_directory(path: &str, ignore: Vec<String>) -> String {
 
     // Store in .git/objects/xx/yyyy...
     let object_dir = format!(".hit/objects/{}", &hash_hex[..2]);
-    let object_file = (&hash_hex[2..]).to_string();
+    let object_file = hash_hex[2..].to_string();
     let object_path = Path::new(&object_dir).join(&object_file);
 
     if !object_path.exists() {

@@ -3,7 +3,7 @@
 pub fn cat_file(hash: &str, print: bool) {
     // look up file at .hit/objects/ab/cdef...
     let object_dir = format!(".hit/objects/{}", &hash[..2]);
-    let object_file = (&hash[2..]).to_string();
+    let object_file = hash[2..].to_string();
     let object_path = std::path::PathBuf::from(&object_dir).join(object_file);
     // check if file exists
     if !object_path.exists() {
