@@ -4,7 +4,7 @@ use crate::utils::hash_object::{hash_object, resolve_head};
 use crate::utils::objects::Object;
 use std::collections::{HashMap, HashSet};
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 pub fn status() {
     // TODO: implement support for .hitignore
