@@ -49,6 +49,7 @@ pub struct Tree {
 }
 
 // oh this is
+#[derive(Debug, Clone)]
 pub struct TreeEntry {
     pub mode: String,
     pub name: String,

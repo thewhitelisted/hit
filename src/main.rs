@@ -8,6 +8,7 @@ mod commands {
     pub mod status;
     pub mod write_tree;
     pub mod add;
+    pub mod commit;
 }
 
 // the marginally smaller list of death
@@ -99,6 +100,28 @@ fn main() {
             }
             let path = &args[2];
             commands::add::add(path);
+        }
+        "commit" => {
+            // if no message, return error
+            if args.len() < 3 {
+                eprintln!("Usage: {} commit -m <message>", args[0]);
+                std::process::exit(1);
+            }
+            let message = if args[2] == "-m" {
+                if args.len() < 4 {
+                    eprintln!("Usage: {} commit -m <message>", args[0]);
+                    std::process::exit(1);
+                }
+                Some(args[3].clone())
+            } else {
+                None
+            };
+            if let Some(msg) = message {
+                commands::commit::commit(&msg);
+            } else {
+                eprintln!("Usage: {} commit -m <message>", args[0]);
+                std::process::exit(1);
+            }
         }
         // TODO: HELP!!!
         _ => {
