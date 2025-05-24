@@ -13,6 +13,7 @@ mod commands {
 pub mod utils {
     pub mod hash_object;
     pub mod objects;
+    pub mod index;
 }
 
 fn main() {
