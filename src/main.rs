@@ -7,6 +7,7 @@ mod commands {
     pub mod init;
     pub mod status;
     pub mod write_tree;
+    pub mod add;
 }
 
 // the marginally smaller list of death
@@ -90,6 +91,14 @@ fn main() {
                 std::process::exit(1);
             }
             commands::status::status();
+        }
+        "add" => {
+            if args.len() < 3 {
+                eprintln!("Usage: {} add <file|directory>", args[0]);
+                std::process::exit(1);
+            }
+            let path = &args[2];
+            commands::add::add(path);
         }
         // TODO: HELP!!!
         _ => {
