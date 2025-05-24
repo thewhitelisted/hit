@@ -1,5 +1,10 @@
 # hit: a shitty git clone written in blazingly fast rust
 
+```rust
+let git: Git = Git::new();
+let hit: Git = git.clone();
+```
+
 ## motivations
 
 i always wanted to understand and learn lower level programming at a higher level. so, i decided to learn how git works under the hood. this project should hopefully be a functional version of git, written in rust, that i can use (i will not use this) in other projects.
@@ -28,6 +33,13 @@ hit init
 
 ```bash
 hit add .
+```
+
+### unstage or delete files!
+
+```bash
+hit rm --cached <file>
+hit rm <file>
 ```
 
 ### commit changes!

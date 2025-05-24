@@ -56,3 +56,29 @@ fn add_directory(dir: &Path, index: &mut Index) {
         }
     }
 }
+
+
+/// Removes a file from the index (and optionally the working directory)
+pub fn rm(path: &str, cached: bool) {
+    let mut index = Index::load();
+
+    if !index.entries.iter().any(|e| e.path == path) {
+        eprintln!("fatal: path '{}' is not in the index", path);
+        std::process::exit(1);
+    }
+
+    // Remove from index
+    index.remove(path);
+    index.save();
+
+    // Remove from working directory if not --cached
+    if !cached {
+        if Path::new(path).exists() {
+            fs::remove_file(path).expect("Failed to delete file");
+        } else {
+            eprintln!("warning: file '{}' already missing", path);
+        }
+    }
+
+    println!("removed '{}'", path);
+}

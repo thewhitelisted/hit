@@ -101,6 +101,23 @@ fn main() {
             let path = &args[2];
             commands::add::add(path);
         }
+        "rm" =>  {
+            if args.len() < 3 {
+                eprintln!("Usage: {} rm [--cashed] <file>", args[0]);
+                std::process::exit(1);
+            }
+            // check for --cashed
+            let cached = if args[2] == "--cached" {
+                if args.len() < 4 {
+                    eprintln!("Usage: {} rm --cached <file>", args[0]);
+                    std::process::exit(1);
+                }
+                true
+            } else {
+                false
+            };
+            commands::add::rm(&args[2 + cached as usize], cached);
+        }
         "commit" => {
             // if no message, return error
             if args.len() < 3 {
