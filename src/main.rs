@@ -9,6 +9,7 @@ mod commands {
     pub mod write_tree;
     pub mod add;
     pub mod commit;
+    pub mod reset;
 }
 
 // the marginally smaller list of death
@@ -139,6 +140,14 @@ fn main() {
                 eprintln!("Usage: {} commit -m <message>", args[0]);
                 std::process::exit(1);
             }
+        }
+        "reset" => {
+            if args.len() < 3 {
+                eprintln!("Usage: {} reset <file>", args[0]);
+                std::process::exit(1);
+            }
+            let path = &args[2];
+            commands::reset::reset(path);
         }
         // TODO: HELP!!!
         _ => {

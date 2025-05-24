@@ -8,6 +8,7 @@ use std::path::PathBuf;
 
 pub fn status() {
     // TODO: implement support for .hitignore
+    // TODO: add support for staged and tracked files (doesn't list ass staged or tracked)
     let head_sha = resolve_head().expect("Failed to resolve HEAD");
     let head_commit = match Object::read(&head_sha).expect("Failed to read HEAD object") {
         Object::Commit(commit) => commit,

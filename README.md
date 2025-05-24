@@ -80,6 +80,12 @@ hit branch
 hit status
 ```
 
+### reset index to HEAD
+
+```bash
+hit reset <path>
+```
+
 ## TODOS
 
 - [x] init
@@ -93,4 +99,5 @@ hit status
 - [x] status
 - [x] add and .hit/index
 - [x] commiting!
+- [x] reset
 - [ ] log
