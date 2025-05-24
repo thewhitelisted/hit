@@ -24,7 +24,19 @@ after doing this, you can add the hit.exe file to your path in /target/release/
 hit init
 ```
 
-### stage all changes!
+### stage files!
+
+```bash
+hit add .
+```
+
+### commit changes!
+
+```bash
+hit commit [-m message]
+```
+
+### get a tree hash!
 
 ```bash
 hit write-tree
@@ -67,5 +79,6 @@ hit status
 - [x] checkout -> not quite finished, see TODOS in /commands/checkout.rs
 - [x] branch
 - [x] status
-- [ ] add and .hit/index
+- [x] add and .hit/index
+- [x] commiting!
 - [ ] log
