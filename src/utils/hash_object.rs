@@ -68,7 +68,9 @@ pub fn resolve_head() -> Option<String> {
     if head.starts_with("ref: ") {
         let ref_path = head[5..].trim();
         let full_path = Path::new(".hit").join(ref_path);
-        fs::read_to_string(full_path).ok().map(|s| s.trim().to_string())
+        fs::read_to_string(full_path)
+            .ok()
+            .map(|s| s.trim().to_string())
     } else {
         Some(head.trim().to_string())
     }

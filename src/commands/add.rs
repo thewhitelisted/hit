@@ -1,8 +1,8 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use crate::utils::index::{Index, IndexEntry};
 use crate::utils::hash_object;
+use crate::utils::index::{Index, IndexEntry};
 
 pub fn add(path: &str) {
     let path_buf = PathBuf::from(path);
@@ -56,7 +56,6 @@ fn add_directory(dir: &Path, index: &mut Index) {
         }
     }
 }
-
 
 /// Removes a file from the index (and optionally the working directory)
 pub fn rm(path: &str, cached: bool) {

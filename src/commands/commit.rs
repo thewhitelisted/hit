@@ -1,14 +1,14 @@
+use crate::utils::hash_object::resolve_head;
 use crate::utils::index::{Index, IndexEntry};
 use crate::utils::objects::{Object, TreeEntry};
-use crate::utils::hash_object::resolve_head;
-use std::collections::{HashMap, BTreeMap};
+use flate2::Compression;
+use flate2::write::ZlibEncoder;
+use sha1::{Digest, Sha1};
+use std::collections::{BTreeMap, HashMap};
 use std::fs;
+use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
-use sha1::{Sha1, Digest};
-use flate2::write::ZlibEncoder;
-use flate2::Compression;
-use std::io::Write;
 
 pub fn commit(message: &str) {
     let index = Index::load();
@@ -84,7 +84,10 @@ fn build_tree_from_index(index: &Index) -> String {
         path_map.entry(parent).or_default().push((path, entry));
     }
 
-    fn build_tree(dir: &Path, path_map: &BTreeMap<PathBuf, Vec<(PathBuf, &IndexEntry)>>) -> (Vec<TreeEntry>, String) {
+    fn build_tree(
+        dir: &Path,
+        path_map: &BTreeMap<PathBuf, Vec<(PathBuf, &IndexEntry)>>,
+    ) -> (Vec<TreeEntry>, String) {
         let mut entries = Vec::new();
         let mut raw = Vec::new();
 

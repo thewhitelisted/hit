@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct IndexEntry {
@@ -19,7 +19,9 @@ impl Index {
             let data = std::fs::read_to_string(path).expect("Failed to read index");
             serde_json::from_str(&data).expect("Invalid index format")
         } else {
-            Index { entries: Vec::new() }
+            Index {
+                entries: Vec::new(),
+            }
         }
     }
 
@@ -42,4 +44,3 @@ impl Index {
         self.entries.retain(|e| e.path != path);
     }
 }
-

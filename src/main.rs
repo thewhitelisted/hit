@@ -1,22 +1,22 @@
 // the long list of death
 mod commands {
+    pub mod add;
     pub mod branch;
     pub mod cat_file;
     pub mod checkout;
+    pub mod commit;
     pub mod commit_tree;
     pub mod init;
+    pub mod reset;
     pub mod status;
     pub mod write_tree;
-    pub mod add;
-    pub mod commit;
-    pub mod reset;
 }
 
 // the marginally smaller list of death
 pub mod utils {
     pub mod hash_object;
-    pub mod objects;
     pub mod index;
+    pub mod objects;
 }
 
 fn main() {
@@ -102,7 +102,7 @@ fn main() {
             let path = &args[2];
             commands::add::add(path);
         }
-        "rm" =>  {
+        "rm" => {
             if args.len() < 3 {
                 eprintln!("Usage: {} rm [--cashed] <file>", args[0]);
                 std::process::exit(1);
