@@ -1,5 +1,6 @@
 use crate::utils::index::{Index, IndexEntry};
 use crate::utils::objects::{Object, TreeEntry};
+use crate::utils::hash_object::resolve_head;
 use std::collections::{HashMap, BTreeMap};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -183,16 +184,5 @@ fn update_head(new_sha: &str) {
         fs::write(full_ref_path, format!("{}\n", new_sha)).unwrap();
     } else {
         fs::write(".hit/HEAD", format!("{}\n", new_sha)).unwrap(); // detached HEAD
-    }
-}
-
-fn resolve_head() -> Option<String> {
-    let head = fs::read_to_string(".hit/HEAD").ok()?;
-    if head.starts_with("ref: ") {
-        let ref_path = head[5..].trim();
-        let full_path = Path::new(".hit").join(ref_path);
-        fs::read_to_string(full_path).ok().map(|s| s.trim().to_string())
-    } else {
-        Some(head.trim().to_string())
     }
 }

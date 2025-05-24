@@ -1,6 +1,6 @@
 // status refers to the level of being or condition of something, in this case, the state of the repository
 
-use crate::utils::hash_object::hash_object;
+use crate::utils::hash_object::{hash_object, resolve_head};
 use crate::utils::objects::Object;
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -113,18 +113,4 @@ fn walk_working_dir(root: &str) -> Vec<PathBuf> {
     }
 
     files
-}
-
-/// Resolves HEAD to a commit SHA
-fn resolve_head() -> Option<String> {
-    let head = fs::read_to_string(".hit/HEAD").ok()?;
-    if head.starts_with("ref: ") {
-        let ref_path = head[5..].trim();
-        let full_path = Path::new(".hit").join(ref_path);
-        fs::read_to_string(full_path)
-            .ok()
-            .map(|s| s.trim().to_string())
-    } else {
-        Some(head.trim().to_string())
-    }
 }

@@ -62,3 +62,14 @@ pub fn hash_object(file_path: &str, write: bool, print: bool) -> String {
 
     hash_hex
 }
+
+pub fn resolve_head() -> Option<String> {
+    let head = fs::read_to_string(".hit/HEAD").ok()?;
+    if head.starts_with("ref: ") {
+        let ref_path = head[5..].trim();
+        let full_path = Path::new(".hit").join(ref_path);
+        fs::read_to_string(full_path).ok().map(|s| s.trim().to_string())
+    } else {
+        Some(head.trim().to_string())
+    }
+}
