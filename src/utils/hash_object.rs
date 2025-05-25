@@ -68,19 +68,19 @@ pub fn resolve_head() -> Option<String> {
     if head.starts_with("ref: ") {
         let ref_path = head[5..].trim();
         let full_path = Path::new(".hit").join(ref_path);
-        
+
         // Check if the ref file exists
         if !full_path.exists() {
             return None;
         }
-        
+
         // Read and verify ref content
         let content = fs::read_to_string(&full_path).ok()?;
         let trimmed = content.trim();
         if trimmed.is_empty() {
             return None; // Empty ref file is treated as no commit
         }
-        
+
         Some(trimmed.to_string())
     } else {
         let trimmed = head.trim();

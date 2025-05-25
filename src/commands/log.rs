@@ -1,7 +1,7 @@
 use crate::utils::objects;
+use chrono::{DateTime, Utc};
 use std::fs;
 use std::path::Path;
-use chrono::{DateTime, Utc};
 
 pub fn log() {
     let mut current = resolve_head().expect("HEAD not found");
@@ -21,7 +21,9 @@ fn resolve_head() -> Option<String> {
     if head.starts_with("ref: ") {
         let ref_path = head[5..].trim();
         let full_path = Path::new(".hit").join(ref_path);
-        fs::read_to_string(full_path).ok().map(|s| s.trim().to_string())
+        fs::read_to_string(full_path)
+            .ok()
+            .map(|s| s.trim().to_string())
     } else {
         Some(head.trim().to_string())
     }
@@ -42,7 +44,11 @@ fn print_commit(sha: &str, commit: &objects::Commit) {
     let datetime: DateTime<Utc> = DateTime::from_timestamp(commit.timestamp as i64, 0).unwrap();
 
     println!("Author: {}", commit.author);
-    println!("Date:   {} {}\n", datetime.format("%a %b %e %T %Y"), commit.timezone);
+    println!(
+        "Date:   {} {}\n",
+        datetime.format("%a %b %e %T %Y"),
+        commit.timezone
+    );
 
     println!("    {}\n", commit.message);
 }

@@ -7,10 +7,10 @@ mod commands {
     pub mod commit;
     pub mod commit_tree;
     pub mod init;
+    pub mod log;
     pub mod reset;
     pub mod status;
     pub mod write_tree;
-    pub mod log;
 }
 
 // the marginally smaller list of death
