@@ -12,6 +12,16 @@ pub enum Object {
 
 impl Object {
     pub fn read(sha: &str) -> Result<Self, String> {
+        // Validate SHA is not empty
+        if sha.is_empty() {
+            return Err("SHA cannot be empty".into());
+        }
+        
+        // Make sure SHA is at least 2 characters long
+        if sha.len() < 2 {
+            return Err(format!("Invalid SHA: '{}' is too short", sha));
+        }
+        
         // Build object path from SHA
         let path = format!(".hit/objects/{}/{}", &sha[..2], &sha[2..]);
         let compressed = std::fs::read(&path).map_err(|_| "Object not found")?;

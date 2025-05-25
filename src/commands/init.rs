@@ -100,16 +100,5 @@ pub fn initialize_repo() {
         std::process::exit(1);
     }
 
-    // add an index file
-    let index_file = hit_dir.join("index");
-    if index_file.exists() {
-        eprintln!("Error: .hit/index file already exists");
-        std::process::exit(1);
-    }
-    if let Err(e) = fs::write(&index_file, "") {
-        eprintln!("Error: Failed to create .hit/index file: {}", e);
-        std::process::exit(1);
-    }
-
     println!("Initialized empty Hit repository in {}", hit_dir.display());
 }
