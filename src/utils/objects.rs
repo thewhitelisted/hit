@@ -104,7 +104,6 @@ impl Tree {
 }
 
 // if this goes wrong, we have a commitment issue :(
-#[allow(dead_code)]
 pub struct Commit {
     pub tree: String,
     pub parent: Option<String>,
