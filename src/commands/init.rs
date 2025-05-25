@@ -28,6 +28,12 @@ pub fn initialize_repo() {
         std::process::exit(1);
     }
 
+    // this is double cooked
+    hf::hide(hit_dir.clone()).unwrap_or_else(|_| {
+        eprintln!("Error: Failed to hide .hit directory");
+        std::process::exit(1);
+    });
+
     // add a objects directory
     let objects_dir = hit_dir.join("objects");
     if objects_dir.exists() {
