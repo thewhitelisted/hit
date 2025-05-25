@@ -10,6 +10,7 @@ mod commands {
     pub mod reset;
     pub mod status;
     pub mod write_tree;
+    pub mod log;
 }
 
 // the marginally smaller list of death
@@ -148,6 +149,13 @@ fn main() {
             }
             let path = &args[2];
             commands::reset::reset(path);
+        }
+        "log" => {
+            if args.len() != 2 {
+                eprintln!("Usage: {} log", args[0]);
+                std::process::exit(1);
+            }
+            commands::log::log();
         }
         // TODO: HELP!!!
         _ => {

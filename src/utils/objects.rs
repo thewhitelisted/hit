@@ -108,6 +108,9 @@ pub struct Commit {
     pub tree: String,
     pub parent: Option<String>,
     pub message: String,
+    pub author: String,
+    pub timestamp: u64,
+    pub timezone: String,
 }
 
 impl Commit {
@@ -117,7 +120,11 @@ impl Commit {
 
         let mut tree = String::new();
         let mut parent = None;
+        let mut author = String::new();
+        let mut timestamp = 0;
         let mut message = String::new();
+        let mut timezone = String::new();
+
         let mut in_message = false;
 
         for line in lines {
@@ -129,17 +136,34 @@ impl Commit {
             if in_message {
                 message.push_str(line);
                 message.push('\n');
-            } else if line.starts_with("tree ") {
+                continue;
+            }
+
+            if line.starts_with("tree ") {
                 tree = line[5..].to_string();
             } else if line.starts_with("parent ") {
                 parent = Some(line[7..].to_string());
+            } else if line.starts_with("author ") {
+                let rest = &line[7..];
+                // rest: "Chris <chris@example.com> 1716594600 +0000"
+
+                let mut parts = rest.rsplitn(3, ' '); // split from end: tz, timestamp, name
+                timezone = parts.next().unwrap().to_owned(); // "+0000"
+                let ts = parts.next().unwrap(); // "1716594600"
+                let name = parts.next().unwrap(); // "Chris <chris@example.com>"
+
+                author = name.trim().to_string();
+                timestamp = ts.parse().unwrap_or(0);
             }
         }
 
         Ok(Commit {
             tree,
             parent,
+            author,
+            timestamp,
             message: message.trim().to_string(),
+            timezone
         })
     }
 }
