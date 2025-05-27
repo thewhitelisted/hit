@@ -18,6 +18,7 @@ pub mod utils {
     pub mod hash_object;
     pub mod index;
     pub mod objects;
+    pub mod config;
 }
 
 fn main() {
@@ -156,6 +157,14 @@ fn main() {
                 std::process::exit(1);
             }
             commands::log::log();
+        }
+        "config" => {
+            if args.len() != 4 {
+                eprintln!("Usage: {} config <key> <value>", args[0]);
+                std::process::exit(1);
+            }
+            
+            
         }
         // TODO: HELP!!!
         _ => {

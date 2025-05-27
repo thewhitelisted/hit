@@ -1,6 +1,7 @@
 use crate::utils::hash_object::resolve_head;
 use crate::utils::index::{Index, IndexEntry};
 use crate::utils::objects::{Object, TreeEntry};
+use crate::utils::config::get_config_value;
 use flate2::Compression;
 use flate2::write::ZlibEncoder;
 use sha1::{Digest, Sha1};
@@ -42,7 +43,7 @@ fn index_matches_head(index: &Index, head_sha: &str) -> bool {
     })
 }
 
-fn load_tree_map_from_commit(commit_sha: &str) -> HashMap<PathBuf, String> {
+pub fn load_tree_map_from_commit(commit_sha: &str) -> HashMap<PathBuf, String> {
     let commit_obj = Object::read(commit_sha).expect("Failed to read commit");
     let tree_sha = match commit_obj {
         Object::Commit(c) => c.tree,
@@ -136,7 +137,10 @@ fn build_tree_from_index(index: &Index) -> String {
 }
 
 fn write_commit(tree_sha: &str, message: &str) -> String {
-    let author = "You <you@example.com>";
+    let (name, email) = get_author_info();
+    let author = format!("{} <{}>", name.unwrap(), email.unwrap());
+
+
     let timestamp = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .unwrap()
@@ -188,4 +192,11 @@ fn update_head(new_sha: &str) {
     } else {
         fs::write(".hit/HEAD", format!("{}\n", new_sha)).unwrap(); // detached HEAD
     }
+}
+
+fn get_author_info() -> (Option<String>, Option<String>) {
+    let name = get_config_value("user", "name").unwrap_or(Some("You".to_owned()));
+    let email = get_config_value("user", "email").unwrap_or(Some("you@example.com".to_owned()));
+
+    (name, email)
 }
