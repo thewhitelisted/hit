@@ -16,7 +16,10 @@ pub fn status() {
     }
     let head_commit = match Object::read(&(head_sha.unwrap())).expect("Failed to read HEAD object") {
         Object::Commit(commit) => commit,
-        _ => panic!("HEAD does not point to a commit"),
+        _ => { 
+            println!("HEAD does not point to a commit");
+            return;
+        }
     };
 
     let mut head_tree = HashMap::new();
