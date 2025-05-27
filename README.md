@@ -101,7 +101,7 @@ hit reset <path>
 - [x] commiting!
 - [x] reset
 - [x] log
-- [ ] config
+- [x] config
 - [ ] diff
 - [ ] merge
 - [ ] rebase

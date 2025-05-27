@@ -138,7 +138,7 @@ fn build_tree_from_index(index: &Index) -> String {
 
 fn write_commit(tree_sha: &str, message: &str) -> String {
     let (name, email) = get_author_info();
-    let author = format!("{} <{}>", name.unwrap(), email.unwrap());
+    let author = format!("{} <{}>", name, email);
 
 
     let timestamp = SystemTime::now()
@@ -194,9 +194,9 @@ fn update_head(new_sha: &str) {
     }
 }
 
-fn get_author_info() -> (Option<String>, Option<String>) {
+fn get_author_info() -> (String, String) {
     let name = get_config_value("user", "name").unwrap_or(Some("You".to_owned()));
     let email = get_config_value("user", "email").unwrap_or(Some("you@example.com".to_owned()));
 
-    (name, email)
+    (name.unwrap(), email.unwrap())
 }

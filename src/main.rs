@@ -159,12 +159,48 @@ fn main() {
             commands::log::log();
         }
         "config" => {
-            if args.len() != 4 {
-                eprintln!("Usage: {} config <key> <value>", args[0]);
+            if args.len() < 3 {
+                eprintln!("Usage: {} config [--global or --list] <key> <value>", args[0]);
                 std::process::exit(1);
             }
+
+            // check if --list is used
+            // if so, list the username and email
+            if args[2] == "--list" {
+                match utils::config::get_config_value("user", "name") {
+                    Ok(Some(name)) => println!("user.name = {}", name),
+                    Ok(None) => println!("user.name is not set"),
+                    Err(e) => {
+                        eprintln!("Error getting config: {:?}", e);
+                        std::process::exit(1);
+                    }
+                }
+                match utils::config::get_config_value("user", "email") {
+                    Ok(Some(email)) => println!("user.email = {}", email),
+                    Ok(None) => println!("user.email is not set"),
+                    Err(e) => {
+                        eprintln!("Error getting config: {:?}", e);
+                        std::process::exit(1);
+                    }
+                }
+                return;
+            }
             
-            
+            // check if --global is present
+            let scope = if args[2] == "--global" {
+                "--global"
+            } else {
+                ""
+            };
+            let key = if scope.is_empty() { &args[2] } else { &args[3] };
+            let value = if scope.is_empty() { &args[3] } else { &args[4] };
+            match utils::config::set_config_value(scope, "user", key, value) {
+                Ok(_) => println!("Set config: {} = {}", key, value),
+                Err(e) => {
+                    eprintln!("Error setting config: {:?}", e);
+                    std::process::exit(1);
+                }
+            }
         }
         // TODO: HELP!!!
         _ => {
