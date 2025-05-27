@@ -15,10 +15,10 @@ mod commands {
 
 // the marginally smaller list of death
 pub mod utils {
+    pub mod config;
     pub mod hash_object;
     pub mod index;
     pub mod objects;
-    pub mod config;
 }
 
 fn main() {
@@ -160,7 +160,10 @@ fn main() {
         }
         "config" => {
             if args.len() < 3 {
-                eprintln!("Usage: {} config [--global or --list] <key> <value>", args[0]);
+                eprintln!(
+                    "Usage: {} config [--global or --list] <key> <value>",
+                    args[0]
+                );
                 std::process::exit(1);
             }
 
@@ -185,7 +188,7 @@ fn main() {
                 }
                 return;
             }
-            
+
             // check if --global is present
             let scope = if args[2] == "--global" {
                 "--global"

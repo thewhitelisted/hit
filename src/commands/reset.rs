@@ -1,6 +1,6 @@
-use crate::utils::index::{Index, IndexEntry};
-use crate::utils::hash_object::resolve_head;
 use crate::commands::commit::load_tree_map_from_commit;
+use crate::utils::hash_object::resolve_head;
+use crate::utils::index::{Index, IndexEntry};
 use std::path::PathBuf;
 
 /// Reset index entry to match HEAD commit

@@ -14,9 +14,10 @@ pub fn status() {
         println!("Empty repository, all files are untracked.");
         return;
     }
-    let head_commit = match Object::read(&(head_sha.unwrap())).expect("Failed to read HEAD object") {
+    let head_commit = match Object::read(&(head_sha.unwrap())).expect("Failed to read HEAD object")
+    {
         Object::Commit(commit) => commit,
-        _ => { 
+        _ => {
             println!("HEAD does not point to a commit");
             return;
         }

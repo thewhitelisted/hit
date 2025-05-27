@@ -1,7 +1,7 @@
-use std::fs;
-use std::path::{Path, PathBuf};
-use std::io;
 use configparser::ini::Ini;
+use std::fs;
+use std::io;
+use std::path::{Path, PathBuf};
 
 #[derive(Debug)]
 pub enum ConfigError {
@@ -24,7 +24,7 @@ pub fn get_config_value(section: &str, key: &str) -> Result<Option<String>, Conf
         let mut conf = Ini::new();
         conf.load(local_path.to_str().unwrap())
             .map_err(|e| ConfigError::ParseError(e.to_string()))?;
-        
+
         if let Some(val) = conf.get(section, key) {
             return Ok(Some(val));
         }
@@ -37,7 +37,7 @@ pub fn get_config_value(section: &str, key: &str) -> Result<Option<String>, Conf
             let mut conf = Ini::new();
             conf.load(global_path.to_str().unwrap())
                 .map_err(|e| ConfigError::ParseError(e.to_string()))?;
-            
+
             if let Some(val) = conf.get(section, key) {
                 return Ok(Some(val));
             }
@@ -50,13 +50,16 @@ pub fn get_config_value(section: &str, key: &str) -> Result<Option<String>, Conf
 }
 
 /// Set config value (local or global)
-pub fn set_config_value(scope: &str, section: &str, key: &str, value: &str) -> Result<(), ConfigError> {
+pub fn set_config_value(
+    scope: &str,
+    section: &str,
+    key: &str,
+    value: &str,
+) -> Result<(), ConfigError> {
     let path = match scope {
-        "--global" => {
-            home::home_dir()
-                .ok_or(ConfigError::HomeDirNotFound)?
-                .join(".hitconfig")
-        }
+        "--global" => home::home_dir()
+            .ok_or(ConfigError::HomeDirNotFound)?
+            .join(".hitconfig"),
         _ => PathBuf::from(".hit").join("config"),
     };
 

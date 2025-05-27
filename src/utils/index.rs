@@ -45,7 +45,7 @@ impl Index {
                 !line.is_empty() && entry.path.starts_with(line)
             }) {
                 self.entries.push(entry);
-            } 
+            }
         }
     }
 
