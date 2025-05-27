@@ -9,8 +9,12 @@ use std::path::PathBuf;
 pub fn status() {
     // TODO: implement support for .hitignore
     // TODO: add support for staged and tracked files (doesn't list ass staged or tracked)
-    let head_sha = resolve_head().expect("Failed to resolve HEAD");
-    let head_commit = match Object::read(&head_sha).expect("Failed to read HEAD object") {
+    let head_sha = resolve_head();
+    if head_sha.is_none() {
+        println!("Empty repository, all files are untracked.");
+        return;
+    }
+    let head_commit = match Object::read(&(head_sha.unwrap())).expect("Failed to read HEAD object") {
         Object::Commit(commit) => commit,
         _ => panic!("HEAD does not point to a commit"),
     };
