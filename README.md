@@ -100,4 +100,9 @@ hit reset <path>
 - [x] add and .hit/index
 - [x] commiting!
 - [x] reset
-- [ ] log
+- [x] log
+- [ ] config
+- [ ] diff
+- [ ] merge
+- [ ] rebase
+- [ ] remote (create tcp server and store hit repositories)
