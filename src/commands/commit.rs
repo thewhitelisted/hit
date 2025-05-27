@@ -2,6 +2,7 @@ use crate::utils::hash_object::resolve_head;
 use crate::utils::index::{Index, IndexEntry};
 use crate::utils::objects::{Object, TreeEntry};
 use crate::utils::config::get_config_value;
+use chrono::Offset;
 use flate2::Compression;
 use flate2::write::ZlibEncoder;
 use sha1::{Digest, Sha1};
@@ -146,6 +147,11 @@ fn write_commit(tree_sha: &str, message: &str) -> String {
         .unwrap()
         .as_secs();
 
+    let offset = chrono::Local::now().offset().fix().local_minus_utc();
+    let offset_hours = offset / 3600; // Convert seconds to hours
+    let offset_minutes = (offset.abs() % 3600) / 60; // Get remaining minutes
+    let offset_str = format!("{:+03}:{:02}", offset_hours, offset_minutes); 
+
     let parent = resolve_head();
 
     let mut content = String::new();
@@ -153,8 +159,7 @@ fn write_commit(tree_sha: &str, message: &str) -> String {
     if let Some(p) = parent.clone() {
         content += &format!("parent {}\n", p);
     }
-    content += &format!("author {} {} +0000\n", author, timestamp);
-    content += &format!("committer {} {} +0000\n", author, timestamp);
+    content += &format!("author {} {} {}\n", author, timestamp, offset_str);
     content += "\n";
     content += message;
     content += "\n";
