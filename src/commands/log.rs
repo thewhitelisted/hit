@@ -38,7 +38,6 @@ fn read_commit(sha: &str) -> Option<objects::Commit> {
 
 fn print_commit(sha: &str, commit: &objects::Commit) {
     println!("commit {}", sha);
-    println!("{}", commit.timestamp);
 
     // Parse and format timestamp
     let datetime: DateTime<Utc> = DateTime::from_timestamp(commit.timestamp as i64, 0).unwrap();
