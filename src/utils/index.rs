@@ -35,7 +35,17 @@ impl Index {
         if let Some(e) = self.entries.iter_mut().find(|e| e.path == entry.path) {
             *e = entry;
         } else {
-            self.entries.push(entry);
+            // load .hitignore
+            let hitignore = std::fs::read_to_string(".hitignore").unwrap_or_default();
+            // Check if the entry is ignored
+            // check if the path of the file is in any .hitignore directories
+            // eg. ".hitignore" contains "/logs/" and the entry path is "logs/error.log"
+            if !hitignore.lines().any(|line| {
+                let line = line.trim();
+                !line.is_empty() && entry.path.starts_with(line)
+            }) {
+                self.entries.push(entry);
+            } 
         }
     }
 
